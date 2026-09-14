@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      # Injecting connection paths via environment variables for security compliance
+      uri: ${MONGO_URI}
+      database: salespulse
+
+server:
+  port: 8080
