@@ -10,13 +10,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/salesforce")
-@CrossOrigin(origins = "*") // Vital for connecting your Angular Dashboard seamlessly later
+@CrossOrigin(origins = "*") 
 public class SalesforceWebhookController {
 
     private final LeadRepository leadRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    
-    // Relative path pointing to our Codespace streaming staging directory
     private static final String STAGING_DIR = "../staging-data/";
 
     public SalesforceWebhookController(LeadRepository leadRepository) {
@@ -25,28 +23,30 @@ public class SalesforceWebhookController {
 
     @PostMapping("/webhook")
     public ResponseEntity<LeadDocument> receiveApexCallout(@RequestBody LeadDocument rawLead) {
-        System.out.println("Inbound Adapter: Captured Salesforce payload for " + rawLead.getCompanyName());
+        // Log the ingestion using high-fidelity compliance terminology for recruiters
+        System.out.println("📥 TRANSACTIONAL INGESTION ADAPTER: Intercepted payload for Bank/Client: " + rawLead.getCompanyName());
+        System.out.println("⚠️ LATENCY PROFILE REPORTED: " + rawLead.getPainPointDescription());
         
         try {
-            // 1. Instantly persist transactional data state to MongoDB Cloud
+            // 1. Commit the transaction tracking payload directly to MongoDB Cloud
             LeadDocument savedDoc = leadRepository.save(rawLead);
             
-            // 2. Guarantee the staging stream directory path exists
+            // 2. Guarantee structural stream storage folder exists
             File directory = new File(STAGING_DIR);
             if (!directory.exists()) {
                 directory.mkdirs();
             }
 
-            // 3. Serialize to an isolated event file for the PySpark Streaming computation
+            // 3. Serialize to an isolated event file for the PySpark Streaming filter
             String eventFile = "event_" + UUID.randomUUID() + ".json";
             File outputFile = new File(directory, eventFile);
             objectMapper.writeValue(outputFile, savedDoc);
             
-            System.out.println("⚡ Event piped to PySpark staging framework: " + eventFile);
+            System.out.println("⚡ Pipes & Filters: Event file successfully staged for PySpark processing: " + eventFile);
             return ResponseEntity.ok(savedDoc);
             
         } catch (Exception e) {
-            System.err.println("❌ Architectural Ingestion Failure: " + e.getMessage());
+            System.err.println("❌ Adapter transformation breakdown: " + e.getMessage());
             return ResponseEntity.internalServerError().build();
         }
     }

@@ -44,6 +44,7 @@
 
   <build>
     <plugins>
+      <!-- Core execution plugin required for running spring-boot commands -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
