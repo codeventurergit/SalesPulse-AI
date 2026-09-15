@@ -1,0 +1,100 @@
+<div class="dashboard-container">
+  <!-- Top Navigation Header -->
+  <header class="dashboard-header">
+    <div class="brand-zone">
+      <span class="pulse-icon">⚡</span>
+      <h1>SalesPulse AI <span class="badge">Enterprise Risk Node</span></h1>
+    </div>
+    <div class="status-zone">
+      <span class="status-indicator live"></span>
+      <p>Decoupled PySpark Streaming Pipeline Active</p>
+    </div>
+  </header>
+
+  <!-- Main Grid System -->
+  <main class="dashboard-grid">
+    
+    <!-- LEFT PANEL: Salesforce Inbound Webhook Simulator Form -->
+    <section class="panel simulator-panel">
+      <div class="panel-header">
+        <h2>📡 Salesforce Inbound Adapter Simulator</h2>
+        <p>Trigger a mock Apex REST payload over the API Gateway</p>
+      </div>
+
+      <div class="panel-body">
+        <div class="form-group">
+          <label>Institutional Client / Bank Name</label>
+          <input type="text" [(ngModel)]="mockClientName" placeholder="e.g., Apex Clearing Corp">
+        </div>
+
+        <div class="form-group">
+          <label>Core Processing Framework (Tech Stack)</label>
+          <input type="text" [(ngModel)]="mockTechStack" placeholder="e.g., Legacy Mainframe / Oracle DB Queue">
+        </div>
+
+        <div class="form-group">
+          <label>Estimated Transaction Ledger Value ($ USD)</label>
+          <input type="number" [(ngModel)]="mockValue" placeholder="e.g., 4500000">
+        </div>
+
+        <div class="form-group">
+          <label>Ingestion Latency & Identified Risk Anomalies</label>
+          <textarea [(ngModel)]="mockPainPoint" rows="4" 
+            placeholder="Describe the transaction pipeline risk parameters or system processing log anomalies..."></textarea>
+        </div>
+
+        <button class="btn-trigger" (click)="fireTransactionSimulation()" [disabled]="isLoading">
+          {{ isLoading ? '🔄 Encapsulating Payload...' : '⚡ Fire Apex REST Callout' }}
+        </button>
+      </div>
+    </section>
+
+    <!-- RIGHT PANEL: Real-Time Stream Monitoring Matrix -->
+    <section class="panel telemetry-panel">
+      <div class="panel-header">
+        <h2>🧠 Real-Time Micro-Batch AI Enrichment Logs</h2>
+        <p>Vector RAG lookup state and serverless AWS Bedrock synthesis maps</p>
+      </div>
+
+      <div class="panel-body logs-container">
+        <!-- System Empty State -->
+        @if (!processedTransaction) {
+          <div class="empty-state">
+            <p>Ready for transactional traffic. Await external inbound webhooks...</p>
+          </div>
+        }
+
+        <!-- Live Streaming Transaction Output Card -->
+        @if (processedTransaction) {
+          <div class="compliance-card card-fade-in">
+            <div class="card-meta">
+              <span class="client-title">🏦 {{ processedTransaction.companyName }}</span>
+              <span class="deal-value">${{ processedTransaction.estimatedDealValue | number }} USD</span>
+            </div>
+
+            <div class="data-row">
+              <strong>System Stack Matrix:</strong>
+              <p class="code-snippet">{{ processedTransaction.currentTechStack }}</p>
+            </div>
+
+            <div class="data-row">
+              <strong>Reported Processing Latency / Anomaly:</strong>
+              <p class="text-block">{{ processedTransaction.painPointDescription }}</p>
+            </div>
+
+            <!-- AI Output Target Block -->
+            <div class="data-row ai-block">
+              <div class="ai-header">
+                <span>🤖 Serverless AWS Bedrock RAG Roadmap:</span>
+                <span class="model-badge">Anthropic Claude v2</span>
+              </div>
+              <p class="ai-text-roadmap">
+                {{ processedTransaction.aiStrategySummary || '🔄 PySpark structured streaming micro-batch processing in progress...' }}
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  </main>
+</div>
